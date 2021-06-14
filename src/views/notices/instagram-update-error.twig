@@ -1,0 +1,7 @@
+<div class="notice notice-error">
+    {% if error_msg is not empty %}
+        <p>{{ error_msg }}</p>
+    {% else %}
+        <p>Instagram token generation and exchange errored - Please reauthorise Instagram account or retry later.</p>
+    {% endif %}
+</div>
