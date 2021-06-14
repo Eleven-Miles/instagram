@@ -1,0 +1,22 @@
+{
+    "name": "tj-digital/instagram",
+    "description": "A PHP WordPress package that providers a connector (via ACF) to authorise and manage Instagram data and feeds",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Harry Finn",
+            "email": "hfinn@thinkingjuice.co.uk"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "upstatement/routes": "^0.5.0",
+        "timber/timber": "^1.18"
+    },
+    "autoload": {
+        "psr-4": {
+            "TJDigital\\Instagram\\": "src/"
+        }
+    }
+}
