@@ -1,20 +1,35 @@
 <?php
 
-namespace TJDigital\Instagram;
+namespace TJDigital\Instagram\Admin;
 
 use Routes;
 use DateTimeImmutable;
 use Timber\Timber;
-use TJDigital\Instagram\InstagramAuth;
+use TJDigital\Instagram\Admin\InstagramAuth;
 
+/**
+ * Class InstagramSettings
+ */
 class InstagramSettings
 {
+    /**
+     * InstagramSettings constructor which sets up admin notices
+     *  and custom callback routing
+     */
     public function __construct()
     {
         add_action('admin_notices', [__CLASS__, 'instagramNotices']);
+
+        $this->setupRouting();
     }
 
-    public function instagramAuthLink($field)
+    /**
+     * Renders the Instagram authorisation button link
+     *  in the ACF settings page (when defined)
+     *
+     * @return void
+     */
+    public function instagramAuthLink(): void
     {
         $url = InstagramAuth::generateAuthorizeUrl();
         $instagram_data = get_option('instagram_data');
@@ -30,7 +45,12 @@ class InstagramSettings
         }
     }
 
-    public function instagramNotices()
+    /**
+     * Adds admin notices to be displayed upon callback completion
+     *
+     * @return void
+     */
+    public function instagramNotices(): void
     {
         if (!isset($_GET['response_type'])) {
             return;
@@ -39,10 +59,15 @@ class InstagramSettings
         $response_type = $_GET['response_type'];
         $error_msg = !empty($_GET['error_msg']) ? $_GET['error_msg'] : false;
 
-        Timber::render("../Views/notices/instagram-update-{$response_type}.twig", ['error_msg' => $error_msg]);
+        Timber::render(__DIR__ . "/views/notices/instagram-update-{$response_type}.twig", ['error_msg' => $error_msg]);
     }
 
-    private function setupRouting()
+    /**
+     * Callback routing for Facebook/Instagram app authorisation
+     *
+     * @return void
+     */
+    private function setupRouting(): void
     {
         Routes::map('/auth/instagram/callback', static function () {
             $code = !empty($_GET['code']) ? sanitize_text_field($_GET['code']) : false;
