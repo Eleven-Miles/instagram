@@ -2,7 +2,7 @@
 
 namespace TJDigital\Instagram;
 
-use TJDigital\Instagram\InstagramAuth;
+use TJDigital\Instagram\Admin\InstagramAuth;
 use DateTimeImmutable;
 
 /**
@@ -10,14 +10,28 @@ use DateTimeImmutable;
  */
 class InstagramFeed
 {
-    public $cacheFile = false;
+    /**
+     * The cached instagram json data filepath
+     *
+     * @var string
+     */
+    public $cacheFile = '';
 
+    /**
+     * InstagramFeed constructor which configures the cache path
+     */
     public function __construct()
     {
         $this->cacheFile = get_template_directory() . '/cache/instagram.json';
     }
 
-    public function getData()
+    /**
+     * Fetchs the Instagram data, either from the cache file
+     *  (if within the 15 min threshold) or directly from the Instagram API
+     *
+     * @return object
+     */
+    public function getData(): object
     {
         if (file_exists($this->cacheFile) && filemtime($this->cacheFile) > (time() - 900)) {
             $json = file_get_contents($this->cacheFile);
@@ -53,7 +67,6 @@ class InstagramFeed
         $instagram_feed_request = wp_remote_get($url);
         $instagram_feed_response = json_decode(wp_remote_retrieve_body($instagram_feed_request), true);
 
-        // Only update cache if it worked
         if (is_wp_error($instagram_feed_response) || isset($instagram_feed_response['error'])) {
             if (file_exists($this->cacheFile)) {
                 return file_get_contents($this->cacheFile);
@@ -81,7 +94,15 @@ class InstagramFeed
         return json_decode(json_encode(['results' => $feed]));
     }
 
-    private function checkTokenExpiry(string $timestamp)
+    /**
+     * Checks the passed timestamp against the current timestamp value
+     *  and compares the difference to see if it is within 10 days.
+     *
+     * @param string $timestamp A timestamp string to compare.
+     *
+     * @return boolean
+     */
+    private function checkTokenExpiry(string $timestamp): bool
     {
         $date_now = new DateTimeImmutable();
         $expiry_date = new DateTimeImmutable("@$timestamp");
@@ -90,7 +111,16 @@ class InstagramFeed
         return $date_interval_days <= 10;
     }
 
-    private function regenerateAccessToken($access_token, $user_id)
+    /**
+     * Handles the process by which an Instagram token is regenerated
+     *  when within its expiry window.
+     *
+     * @param string $access_token The current access token used for Instagram auth actions.
+     * @param string $user_id      The current WP CMS user's ID (for debugging purposes only).
+     *
+     * @return array
+     */
+    private function regenerateAccessToken(string $access_token, string $user_id): array
     {
         $token_refresh_response = InstagramAuth::exchangeRefreshToken($access_token);
 
