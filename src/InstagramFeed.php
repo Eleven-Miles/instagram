@@ -63,7 +63,7 @@ class InstagramFeed
         }
 
         $base_url = 'https://graph.instagram.com/me/media';
-        $url = "$base_url?fields=id,media_type,media_url,thumbnail_url,permalink&access_token=$access_token";
+        $url = "$base_url?fields=id,caption,media_type,media_url,thumbnail_url,permalink&access_token=$access_token";
         $instagram_feed_request = wp_remote_get($url);
         $instagram_feed_response = json_decode(wp_remote_retrieve_body($instagram_feed_request), true);
 
@@ -82,6 +82,7 @@ class InstagramFeed
 
         foreach ($instagram_feed_response['data'] as $item) {
             $feed[] = [
+                'caption' => $item['caption'],
                 'link' => $item['permalink'],
                 'thumbnail_url' => $item['media_type'] === 'VIDEO' ?
                     $item['thumbnail_url'] :
