@@ -4,6 +4,12 @@
 
 In order for the Instagram authentication process to work, you must setup a Facebook App with support for basic instagram display permissions. Once generated, add your `INSTAGRAM_CLIENT_ID` & `INSTAGRAM_CLIENT_SECRET` values to your project's `.env` file (or ENV vars depending on your setup) in order to succesfully complete authentication.
 
+Within the Facebook App, you will need to add all site urls (local, uat & live) to the `Valid OAuth redirect URIs` field within the `Client OAuth Settings` section of the Instagram app settings. The format should be: `https://{your-site-url}/auth/instagram/callback`. This is the url that the application will pass to Instagram to both validate and redirect back to which is then picked up in the `/auth/instagram/callback` route and ACF options page.
+
+You can also place this same url value in the `Deauthorize` field although this callback is not currently used in this integration.
+
+Once this has been completed, you must then add all Instagram accounts that this integration will use (multiple are supported i.e. via a multi-site setup) to the `User Token Generator` section. This will take you through to the Facebook app roles page and at the bottom there is a section called `Instagram Testers`, here you can add Instagram account by their Instagram username. Once added, the Instagram account holder will need to logging to the Instagram website (not supported yet in the app), go to their settings, click on `Apps and websites` and then click `Tester invitations` and accept the invitation from `Tilda Feed`.
+
 ## Setup
 
 Must be used with ACF and is design to work with an existing custom admin settings/options page to be setup similar, using the [`NanoSoup\Nemesis\ACF\BaseFields`](https://github.com/NanoSoup/Nemesis) package as per the example below.
