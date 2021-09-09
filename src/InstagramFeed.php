@@ -22,7 +22,13 @@ class InstagramFeed
      */
     public function __construct()
     {
-        $this->cacheFile = get_template_directory() . '/cache/instagram.json';
+        if (is_multisite()) {
+            $site_id = get_current_blog_id();
+
+            $this->cacheFile = get_template_directory() . "/cache/instagram_site_$site_id.json";
+        } else {
+            $this->cacheFile = get_template_directory() . '/cache/instagram.json';
+        }
     }
 
     /**
