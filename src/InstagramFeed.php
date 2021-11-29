@@ -96,9 +96,9 @@ class InstagramFeed
             ];
         }
 
-        file_put_contents($this->cacheFile, json_encode(['results' => $feed]));
+        file_put_contents($this->cacheFile, json_encode(['results' => $feed], JSON_HEX_APOS));
 
-        return json_decode(json_encode(['results' => $feed]));
+        return json_decode(json_encode(['results' => $feed], JSON_HEX_APOS));
     }
 
     /**
