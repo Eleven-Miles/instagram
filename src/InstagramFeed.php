@@ -75,7 +75,7 @@ class InstagramFeed
 
         if (is_wp_error($instagram_feed_response) || isset($instagram_feed_response['error'])) {
             if (file_exists($this->cacheFile)) {
-                return file_get_contents($this->cacheFile);
+                return json_decode(file_get_contents($this->cacheFile));
             }
 
             return (object) [
@@ -96,9 +96,9 @@ class InstagramFeed
             ];
         }
 
-        file_put_contents($this->cacheFile, json_encode(['results' => $feed]));
+        file_put_contents($this->cacheFile, json_encode(['results' => $feed], JSON_HEX_APOS));
 
-        return json_decode(json_encode(['results' => $feed]));
+        return json_decode(json_encode(['results' => $feed], JSON_HEX_APOS));
     }
 
     /**
