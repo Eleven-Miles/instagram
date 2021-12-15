@@ -75,7 +75,7 @@ class InstagramFeed
 
         if (is_wp_error($instagram_feed_response) || isset($instagram_feed_response['error'])) {
             if (file_exists($this->cacheFile)) {
-                return file_get_contents($this->cacheFile);
+                return json_decode(file_get_contents($this->cacheFile));
             }
 
             return (object) [
