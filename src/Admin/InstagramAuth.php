@@ -17,11 +17,12 @@ class InstagramAuth
     /**
      * Builds the initial instagram auth url requiring user signon and authorisation
      *
+     * @param string $client_id The Instagram client id.
+     *
      * @return string
      */
-    public static function generateAuthorizeUrl(): string
+    public static function generateAuthorizeUrl(string $client_id): string
     {
-        $client_id = INSTAGRAM_CLIENT_ID;
         $redirect_url = self::getRedirectUrl();
         $base_url = 'https://www.instagram.com/oauth/authorize/';
         $scopes = 'user_media,user_profile';
@@ -32,21 +33,26 @@ class InstagramAuth
     /**
      * Takes the initial auth code from Instagram FB App and generates a short live
      *
-     * @param string $code Value returned form initial auth with Instagram app which can be converted into a short life
-     *               token.
+     * @param string $client_id     The Instagram client id.
+     * @param string $client_secret The Instagram client secret.
+     * @param string $code          Value returned form initial auth with Instagram app which can be converted into a
+     *                              short life token.
      *
      * @return mixed
      */
-    public static function requestShortLifeToken(string $code)
-    {
+    public static function requestShortLifeToken(
+        string $client_id,
+        string $client_secret,
+        string $code
+    ) {
 
         $response = wp_remote_post(
             'https://api.instagram.com/oauth/access_token',
             [
                 'method' => 'POST',
                 'body' => [
-                    'client_id' => INSTAGRAM_CLIENT_ID,
-                    'client_secret' => INSTAGRAM_CLIENT_SECRET,
+                    'client_id' => $client_id,
+                    'client_secret' => $client_secret,
                     'grant_type' => 'authorization_code',
                     'code' => $code,
                     'redirect_uri' => self::getRedirectUrl(),
@@ -72,14 +78,14 @@ class InstagramAuth
     /**
      * Exchanges a short life token for a long life token
      *
+     * @param string $client_secret    The Instagram client secret.
      * @param string $short_life_token A short life token returned by the initial Instagram app auth flow.
      *
      * @return mixed
      */
-    public static function exchangeLongLifeToken(string $short_life_token)
+    public static function exchangeLongLifeToken(string $client_secret, string $short_life_token)
     {
         $base_url = 'https://graph.instagram.com/access_token';
-        $client_secret = INSTAGRAM_CLIENT_SECRET;
         $url = "$base_url?grant_type=ig_exchange_token&client_secret=$client_secret&access_token=$short_life_token";
         $response = wp_remote_get($url);
         $data = json_decode(wp_remote_retrieve_body($response), true);

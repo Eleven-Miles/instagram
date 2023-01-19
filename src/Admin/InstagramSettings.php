@@ -13,11 +13,36 @@ use TJDigital\Instagram\Admin\InstagramAuth;
 class InstagramSettings
 {
     /**
+     * Instagram client id
+     *
+     * @var string
+     */
+    private static $instagram_client_id = INSTAGRAM_CLIENT_ID;
+
+    /**
+     * Instagram client secret
+     *
+     * @var string
+     */
+    private static $instagram_client_secret = INSTAGRAM_CLIENT_SECRET;
+
+    /**
      * InstagramSettings constructor which sets up admin notices
      *  and custom callback routing
+     *
+     * @param string $instagram_client_id     The Instagram client id.
+     * @param string $instagram_client_secret The Instagram client secret.
      */
-    public function __construct()
+    public function __construct(string $instagram_client_id = '', string $instagram_client_secret = '')
     {
+        if (!empty($instagram_client_id)) {
+            self::$instagram_client_id = $instagram_client_id;
+        }
+
+        if (!empty($instagram_client_secret)) {
+            self::$instagram_client_secret = $instagram_client_secret;
+        }
+
         add_action('admin_notices', [__CLASS__, 'instagramNotices']);
 
         $this->setupRouting();
@@ -31,7 +56,7 @@ class InstagramSettings
      */
     public function instagramAuthLink(): void
     {
-        $url = InstagramAuth::generateAuthorizeUrl();
+        $url = InstagramAuth::generateAuthorizeUrl(self::$instagram_client_id);
         $instagram_data = get_option('instagram_data');
 
         echo "<br><a class='button button-primary button-large' href='$url'>Authorise Instagram Feed</a>";
@@ -71,13 +96,18 @@ class InstagramSettings
     {
         Routes::map('/auth/instagram/callback', static function () {
             $code = !empty($_GET['code']) ? sanitize_text_field($_GET['code']) : false;
-            $token_code_response = InstagramAuth::requestShortLifeToken($code);
+            $token_code_response = InstagramAuth::requestShortLifeToken(
+                self::$instagram_client_id,
+                self::$instagram_client_secret,
+                $code
+            );
             $response_type = 'error';
             $error_msg = '';
 
             if ($token_code_response['status'] === 'success') {
                 $instagram_user_id = $token_code_response['data']->user_id;
                 $token_exchange_response = InstagramAuth::exchangeLongLifeToken(
+                    self::$instagram_client_secret,
                     $token_code_response['data']->access_token
                 );
 
