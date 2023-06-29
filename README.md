@@ -1,4 +1,4 @@
-# TJ-Digital: Instagram
+# Eleven Miles: Instagram
 
 ## Requirements
 
@@ -20,7 +20,7 @@ Note: Ensure you replace the `acf/render_field/name=` with the matching field va
 
 ```php
 // Add in your SiteSettings class (or similar)
-use TJDigital\Instagram\Admin\InstagramSettings;
+use ElevenMiles\Instagram\Admin\InstagramSettings;
 
 // Configure the instagram field reference
 $prefix = 'site_settings';
@@ -40,7 +40,7 @@ acf_add_local_field_group([
 add_action('acf/render_field/name=instagram_url', [InstagramSettings::class, 'instagramAuthLink']);
 
 // Add in your theme Kernel class
-use TJDigital\Instagram\Admin\InstagramSettings;
+use ElevenMiles\Instagram\Admin\InstagramSettings;
 
 new InstagramSettings();
 ```
@@ -54,7 +54,7 @@ Once setup from a code prespective, visit your site settings page in your WP CMS
 To use the connected instagram
 
 ```php
-use TJDigital\Instagram\InstagramFeed;
+use ElevenMiles\Instagram\InstagramFeed;
 
 $instagram = new InstagramFeed();
 $instagram_data = $instagram->getData();

@@ -1,11 +1,11 @@
 <?php
 
-namespace TJDigital\Instagram\Admin;
+namespace ElevenMiles\Instagram\Admin;
 
 use Routes;
 use DateTimeImmutable;
 use Timber\Timber;
-use TJDigital\Instagram\Admin\InstagramAuth;
+use ElevenMiles\Instagram\Admin\InstagramAuth;
 
 /**
  * Class InstagramSettings
@@ -29,7 +29,7 @@ class InstagramSettings
      *
      * @return void
      */
-    public function instagramAuthLink(): void
+    public static function instagramAuthLink(): void
     {
         $url = InstagramAuth::generateAuthorizeUrl();
         $instagram_data = get_option('instagram_data');
@@ -50,7 +50,7 @@ class InstagramSettings
      *
      * @return void
      */
-    public function instagramNotices(): void
+    public static function instagramNotices(): void
     {
         if (!isset($_GET['response_type'])) {
             return;
