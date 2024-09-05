@@ -50,7 +50,7 @@ class InstagramSettings
      *
      * @return void
      */
-    public function instagramNotices(): void
+    public static function instagramNotices(): void
     {
         if (!isset($_GET['response_type'])) {
             return;
