@@ -1,8 +1,8 @@
 <?php
 
-namespace TJDigital\Instagram;
+namespace ElevenMiles\Instagram;
 
-use TJDigital\Instagram\Admin\InstagramAuth;
+use ElevenMiles\Instagram\Admin\InstagramAuth;
 use DateTimeImmutable;
 
 /**

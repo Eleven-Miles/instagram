@@ -1,12 +1,12 @@
 {
-    "name": "tj-digital/instagram",
+    "name": "eleven-miles/instagram",
     "description": "A PHP WordPress package that providers a connector (via ACF) to authorise and manage Instagram data and feeds",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "Harry Finn",
-            "email": "hfinn@thinkingjuice.co.uk"
+            "email": "harry.finn@elevenmiles.com"
         }
     ],
     "require": {
@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "TJDigital\\Instagram\\": "src/"
+            "ElevenMiles\\Instagram\\": "src/"
         }
     },
     "config": {

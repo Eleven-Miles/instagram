@@ -1,6 +1,6 @@
 <?php
 
-namespace TJDigital\Instagram\Admin;
+namespace ElevenMiles\Instagram\Admin;
 
 /**
  * Class InstagramAuth
