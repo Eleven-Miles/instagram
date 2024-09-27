@@ -29,7 +29,7 @@ class InstagramSettings
      *
      * @return void
      */
-    public function instagramAuthLink(): void
+    public static function instagramAuthLink(): void
     {
         $url = InstagramAuth::generateAuthorizeUrl();
         $instagram_data = get_option('instagram_data');
