@@ -25,7 +25,7 @@ class InstagramAuth
     {
         $redirect_url = self::getRedirectUrl();
         $base_url = 'https://www.instagram.com/oauth/authorize/';
-        $scopes = 'user_media,user_profile';
+        $scopes = 'instagram_business_basic';
 
         return "$base_url?client_id=$client_id&redirect_uri=$redirect_url&response_type=code&scope=$scopes";
     }
